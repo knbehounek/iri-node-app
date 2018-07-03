@@ -28,7 +28,9 @@ function tweet() {
             for (var i = 0; i < tweets.length; i++) {
                 console.log(tweets[i].created_at);
                 console.log(tweets[i].text);
-
+                //adds  the information as text to log.txt
+                fs.appendFile('log.txt', "n_kelby: " + tweets[i].text + " Created At: " + tweets[i].created_at);
+                fs.appendFile('log.txt', "-----------------------");
             }
         }
     });
@@ -50,6 +52,12 @@ function spotify() {
                 console.log("Preview URL: " + songData.preview_url);
                 console.log("Album: " + songData.album.name);
 
+                //adds  the information as text to log.txt
+                fs.appendFile('log.txt', songData.artists[0].name);
+                fs.appendFile('log.txt', songData.name);
+                fs.appendFile('log.txt', songData.preview_url);
+                fs.appendFile('log.txt', songData.album.name);
+                fs.appendFile('log.txt', "-----------------------");
 
             }
         } else {
@@ -63,9 +71,17 @@ function movie() {
     for (var i = 3; i < nodeArgs.length; i++) {
         movie = movie + " " + nodeArgs[i];
     }
-    var omdbURL = "http://www.omdbapi.com/?t=" + movie + "=&plot=short&apikey=8931952e";
+    var omdbURL = "http://www.omdbapi.com/?t=" + movie + "=&plot=short&apikey=124ed23e";
     request(omdbURL, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+        if (process.argv[3] === undefined) {
+            console.log("-----------------------");
+            console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
+            console.log("It's on Netflix!");
+
+            fs.appendFile('log.txt', "-----------------------");
+            fs.appendFile('log.txt', "If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
+            fs.appendFile('log.txt', "It's on Netflix!");
+        } else if (!error && response.statusCode == 200) {
             var body = JSON.parse(body);
             console.log("Title: " + body.Title);
             console.log("Release Year: " + body.Year);
@@ -74,23 +90,30 @@ function movie() {
             console.log("Language: " + body.Language);
             console.log("Plot: " + body.Plot);
             console.log("Actors: " + body.Actors);
+
+            //adds  the information as text to log.txt
+            fs.appendFile('log.txt', "Title: " + body.Title);
+            fs.appendFile('log.txt', "Release Year: " + body.Year);
+            fs.appendFile('log.txt', "IMdB Rating: " + body.imdbRating);
+            fs.appendFile('log.txt', "Country: " + body.Country);
+            fs.appendFile('log.txt', "Language: " + body.Language);
+            fs.appendFile('log.txt', "Plot: " + body.Plot);
+            fs.appendFile('log.txt', "Actors: " + body.Actors);
+            fs.appendFile('log.txt', "Rotten Tomatoes Rating: " + body.tomatoRating);
+            fs.appendFile('log.txt', "Rotten Tomatoes URL: " + body.tomatoURL);
         } else {
             console.log('Error occurred.')
-        }
-        if (movie === " ") {
-            console.log("-----------------------");
-            console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
-            console.log("It's on Netflix!");
         }
     });
 }
 
 function doFile(){
     fs.readFile('random.txt', "utf8", function(error, data){
-        console.log(data);
       var dataResult = data.split(',');
-      console.log(dataResult);
-      console.log(dataResult[1]);
+    console.log(dataResult);
+    console.log(dataResult[0])
+    console.log(dataResult[1])
+
       spotify(dataResult[1]);
     });
-}
+  }
