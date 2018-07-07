@@ -36,9 +36,13 @@ function tweet() {
     });
 }
 
-function spotify() {
+function spotify(song) {
     var spotify = new Spotify(keys.spotify);
-    var song = "";
+    if(!song === undefined){
+        var song = "";
+    }
+    
+
     for (var i = 3; i < nodeArgs.length; i++) {
         song = song + " " + nodeArgs[i];
     }
